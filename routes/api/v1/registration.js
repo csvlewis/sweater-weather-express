@@ -3,7 +3,6 @@ var router = express.Router();
 var User = require('../../../models').User;
 const bcrypt = require('bcrypt');
 
-
 // User Registration
 router.post('/', function(req, res, next){
   let password = req.body.password;
