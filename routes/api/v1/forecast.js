@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var User = require('../../../models').User;
 const fetch = require('node-fetch');
-pry = require('pryjs')
+pry = require('pryjs');
 
 // City Forecast
 router.get('/', function(req, res, next){
