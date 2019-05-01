@@ -5,9 +5,7 @@ const bcrypt = require('bcrypt');
 
 // User Registration
 router.post('/', function(req, res, next){
-  let password = req.body.password;
-  let password_confirmation = req.body.password_confirmation;
-  if (password == password_confirmation) {
+  if (req.body.password == req.body.password_confirmation) {
     let password = bcrypt.hashSync(req.body.password, 10)
     let key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     User.create({
