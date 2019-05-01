@@ -47,7 +47,7 @@ router.get('/', function(req, res, next){
   })
   .catch(error => {
     res.setHeader("Content-Type", "application/json");
-    res.status(500).send({ error })
+    res.status(401).send(JSON.stringify("Invalid API key"));
   })
 });
 
