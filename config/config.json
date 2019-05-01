@@ -14,10 +14,7 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "lewis",
-    "password": null,
-    "database": "sweater_weather_express_production",
-    "host": "https://secret-stream-64574.herokuapp.com/",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL"
+    }
   }
 }

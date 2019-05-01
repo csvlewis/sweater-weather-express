@@ -19,8 +19,5 @@
   },
   "engines": {
       "node": "10.15.3"
-  },
-  "production": {
-  "use_env_variable": "DATABASE_URL"
   }
 }
