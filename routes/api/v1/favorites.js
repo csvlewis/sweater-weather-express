@@ -23,7 +23,6 @@ router.post('/', function(req, res, next){
         defaults: { latitude: '45', longitude: '45'}
       })
       .then(location => {
-        // eval(pry.it)
         Favorite.findOrCreate({
           where: {
             locationId: location[0].dataValues.id,
@@ -33,7 +32,7 @@ router.post('/', function(req, res, next){
         })
         .then(favorite => {
           res.setHeader("Content-Type", "application/json");
-          res.status(500).send(JSON.stringify({ message: `${req.body.location} has been added to your favorites` }));
+          res.status(200).send(JSON.stringify({ message: `${req.body.location} has been added to your favorites` }));
         })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
@@ -51,4 +50,58 @@ router.post('/', function(req, res, next){
     res.status(401).send(JSON.stringify("Invalid API key"));
   });
 });
+
+// Delete Favorite Location
+router.delete('/', function(req, res, next){
+  User.findOne({
+    where: {
+      api_key: req.body.api_key
+    }
+  })
+  .then(user => {
+    if (user == null) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(401).send(JSON.stringify("Invalid API key"));
+    }
+    else {
+      Location.findOne({
+        where: {
+          name: req.body.location.toLowerCase()
+        }
+      })
+      .then(location => {
+        Favorite.destroy({
+          where: {
+            userId: user.dataValues.id,
+            locationId: location.dataValues.id
+          }
+        })
+        .then(favorite => {
+          if (favorite == 0) {
+            res.setHeader("Content-Type", "application/json");
+            res.status(500).send(JSON.stringify("User does not have location saved"));
+          }
+          else {
+            res.setHeader("Content-Type", "application/json");
+            res.status(204).send({ favorite });
+          }
+        })
+        .catch(error => {
+          res.setHeader("Content-Type", "application/json");
+          res.status(500).send({ error });
+        });
+      })
+      .catch(error => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(500).send({ error });
+      });
+    }
+  })
+  .catch(error => {
+    res.setHeader("Content-Type", "application/json");
+    res.status(401).send(JSON.stringify("Invalid API key"));
+  })
+});
+
+
 module.exports = router;
