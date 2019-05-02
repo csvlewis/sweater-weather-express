@@ -20,12 +20,12 @@ router.post('/', function(req, res, next){
     }
     else {
       res.setHeader("Content-Type", "application/json");
-      res.status(500).send(JSON.stringify("Password does not match"));
+      res.status(500).send(JSON.stringify("Invalid username or password"));
     }
   })
   .catch(error => {
     res.setHeader("Content-Type", "application/json");
-    res.status(500).send({ error })
+    res.status(500).send(JSON.stringify("Invalid username or password"));
   });
 });
 
