@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../../../models').User;
 var Location = require('../../../models').Location;
 var Favorite = require('../../../models').Favorite;
+const fetch = require('node-fetch');
 pry = require('pryjs');
 
 // Save Favorite Location
@@ -18,31 +19,45 @@ router.post('/', function(req, res, next){
       res.status(401).send(JSON.stringify("Invalid API key"));
     }
     else {
-      Location.findOrCreate({
-        where: { name: req.body.location.toLowerCase()},
-        defaults: { latitude: '45', longitude: '45'}
+      var search_location = req.body.location.toLowerCase();
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=AIzaSyDvKMInDzd7n_avQqlsflQwGxhllW-fhlM';
+      fetch(url)
+      .then(function(response){
+        return response.json();
       })
-      .then(location => {
-        Favorite.findOrCreate({
-          where: {
-            locationId: location[0].dataValues.id,
-            userId: user.dataValues.id
-          },
-          attributes : ['userId', 'locationId']
+      .then(function(json){
+        var lat = json.results[0].geometry.location.lat;
+        var lng = json.results[0].geometry.location.lng;
+        Location.findOrCreate({
+          where: { name: search_location},
+          defaults: { latitude: lat, longitude: lng}
         })
-        .then(favorite => {
-          res.setHeader("Content-Type", "application/json");
-          res.status(200).send(JSON.stringify({ message: `${req.body.location} has been added to your favorites` }));
+        .then(location => {
+          Favorite.findOrCreate({
+            where: {
+              locationId: location[0].dataValues.id,
+              userId: user.dataValues.id
+            },
+            attributes : ['userId', 'locationId']
+          })
+          .then(favorite => {
+            res.setHeader("Content-Type", "application/json");
+            res.status(200).send(JSON.stringify({ message: `${req.body.location} has been added to your favorites` }));
+          })
+          .catch(error => {
+            res.setHeader("Content-Type", "application/json");
+            res.status(500).send({ error });
+          });
         })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
-          res.status(500).send({ error });
+          res.status(500).send({ error })
         });
       })
       .catch(error => {
         res.setHeader("Content-Type", "application/json");
-        res.status(500).send({ error })
-      });
+        res.status(500).send(JSON.stringify("Invalid location"));
+      })
     }
   })
   .catch(error => {
