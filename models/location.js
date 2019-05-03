@@ -6,7 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     longitude: DataTypes.STRING
   }, {});
   Location.associate = function(models) {
-    Location.hasMany(models.Favorite)
+    Location.hasMany(models.Favorite, { foreignKey: 'locationId' });
+  };
+
+  Location.prototype.forecast = function() {
   };
   return Location;
 };

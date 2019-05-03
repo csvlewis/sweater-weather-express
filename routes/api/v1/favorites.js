@@ -3,7 +3,8 @@ var router = express.Router();
 var User = require('../../../models').User;
 var Location = require('../../../models').Location;
 var Favorite = require('../../../models').Favorite;
-const fetch = require('node-fetch');
+var Forecast = require('../../../public/forecast');
+var fetch = require('node-fetch');
 pry = require('pryjs');
 
 // Save Favorite Location
@@ -118,5 +119,47 @@ router.delete('/', function(req, res, next){
   })
 });
 
-
+// List Favorite Locations
+router.get('/', function(req, res, next){
+  User.findOne({
+    where: {
+      api_key: req.body.api_key
+    }
+  })
+  .then(user => {
+    if (user == null) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(401).send(JSON.stringify("Invalid API key"));
+    }
+    else {
+      Location.findAll({
+        include: [
+          {
+            model: Favorite, as: Favorite.tableName,
+            where: { 'userId': user.dataValues.id }
+          }
+        ]
+      })
+      .then(location => {
+        var i;
+        var currentForecasts = []
+        for (i = 0; i < location.length; i++) {
+          const forecast = new Forecast(location[i].dataValues.latitude, location[i].dataValues.longitude)
+          forecast.singleForecast()
+          currentForecasts.push(forecast)
+        }
+        eval(pry.it)
+      })
+      .catch(error => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(500).send({ error });
+      });
+    }
+  })
+  .catch(error => {
+    eval(pry.it)
+    res.setHeader("Content-Type", "application/json");
+    res.status(401).send(JSON.stringify("Invalid API key"));
+  })
+})
 module.exports = router;
