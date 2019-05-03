@@ -142,13 +142,37 @@ router.get('/', function(req, res, next){
       })
       .then(location => {
         var i;
-        var currentForecasts = []
-        for (i = 0; i < location.length; i++) {
-          const forecast = new Forecast(location[i].dataValues.latitude, location[i].dataValues.longitude)
-          forecast.singleForecast()
-          currentForecasts.push(forecast)
+        const currentForecasts = []
+        // async function () => {
+        //   try {
+        //     var array = await
+        //   }
+        //   catch {
+        //
+        //   }
+        // }
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
         }
-        eval(pry.it)
+        for (i = 0; i < location.length; i++) {
+          var location_name = location[i].dataValues.name
+          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
+          fetch(url)
+          .then(response => {
+            return response.json();
+          })
+          .then(response => {
+            const forecast = new Forecast(response)
+            currentForecasts.push(forecast.currentWeather(location_name))
+            if (currentForecasts.length == location.length) {
+              res.setHeader("Content-Type", "application/json");
+              res.status(200).send(currentForecasts);
+            }
+          })
+          .catch(error => {
+            return error;
+          });
+        }
       })
       .catch(error => {
         res.setHeader("Content-Type", "application/json");
@@ -157,7 +181,6 @@ router.get('/', function(req, res, next){
     }
   })
   .catch(error => {
-    eval(pry.it)
     res.setHeader("Content-Type", "application/json");
     res.status(401).send(JSON.stringify("Invalid API key"));
   })
