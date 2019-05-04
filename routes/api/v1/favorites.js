@@ -143,17 +143,6 @@ router.get('/', function(req, res, next){
       .then(location => {
         var i;
         const currentForecasts = []
-        // async function () => {
-        //   try {
-        //     var array = await
-        //   }
-        //   catch {
-        //
-        //   }
-        // }
-        function sleep(ms) {
-          return new Promise(resolve => setTimeout(resolve, ms));
-        }
         for (i = 0; i < location.length; i++) {
           var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
           const location_name = location[i].dataValues.name
