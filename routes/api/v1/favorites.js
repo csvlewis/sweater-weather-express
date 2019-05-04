@@ -3,7 +3,8 @@ var router = express.Router();
 var User = require('../../../models').User;
 var Location = require('../../../models').Location;
 var Favorite = require('../../../models').Favorite;
-const fetch = require('node-fetch');
+var Forecast = require('../../../public/forecast');
+var fetch = require('node-fetch');
 pry = require('pryjs');
 
 // Save Favorite Location
@@ -118,5 +119,59 @@ router.delete('/', function(req, res, next){
   })
 });
 
-
+// List Favorite Locations
+router.get('/', function(req, res, next){
+  User.findOne({
+    where: {
+      api_key: req.body.api_key
+    }
+  })
+  .then(user => {
+    if (user == null) {
+      res.setHeader("Content-Type", "application/json");
+      res.status(401).send(JSON.stringify("Invalid API key"));
+    }
+    else {
+      Location.findAll({
+        include: [
+          {
+            model: Favorite, as: Favorite.tableName,
+            where: { 'userId': user.dataValues.id }
+          }
+        ]
+      })
+      .then(location => {
+        var i;
+        const currentForecasts = []
+        for (i = 0; i < location.length; i++) {
+          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
+          const location_name = location[i].dataValues.name
+          fetch(url)
+          .then(response => {
+            return response.json();
+          })
+          .then(response => {
+            const forecast = new Forecast(response)
+            currentForecasts.push(forecast.currentWeather(location_name))
+            if (currentForecasts.length == location.length) {
+              res.setHeader("Content-Type", "application/json");
+              res.status(200).send(currentForecasts);
+            }
+          })
+          .catch(error => {
+            return error;
+          });
+        }
+      })
+      .catch(error => {
+        res.setHeader("Content-Type", "application/json");
+        res.status(500).send({ error });
+      });
+    }
+  })
+  .catch(error => {
+    res.setHeader("Content-Type", "application/json");
+    res.status(401).send(JSON.stringify("Invalid API key"));
+  })
+})
 module.exports = router;

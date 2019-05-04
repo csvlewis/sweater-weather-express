@@ -27,7 +27,6 @@ router.get('/', function(req, res, next){
       .then(json => {
         var lat = json.results[0].geometry.location.lat;
         var lng = json.results[0].geometry.location.lng;
-        eval(pry.it)
         Location.findOrCreate({
           where: { name: search_location},
           defaults: { latitude: lat, longitude: lng}
