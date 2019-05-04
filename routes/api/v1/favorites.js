@@ -157,6 +157,7 @@ router.get('/', function(req, res, next){
         for (i = 0; i < location.length; i++) {
           var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
           const location_name = location[i].dataValues.name
+          fetch(url)
           .then(response => {
             return response.json();
           })
