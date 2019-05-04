@@ -155,9 +155,8 @@ router.get('/', function(req, res, next){
           return new Promise(resolve => setTimeout(resolve, ms));
         }
         for (i = 0; i < location.length; i++) {
-          var location_name = location[i].dataValues.name
           var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
-          fetch(url)
+          const location_name = location[i].dataValues.name
           .then(response => {
             return response.json();
           })
