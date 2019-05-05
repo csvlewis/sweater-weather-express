@@ -1,6 +1,7 @@
 pry = require('pryjs');
 var fetch = require('node-fetch');
 'use strict';
+require('dotenv').config();
 
 module.exports = (sequelize, DataTypes) => {
   const Location = sequelize.define('Location', {
@@ -13,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Location.prototype.forecast = function() {
-    var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + this.latitude + ',' + this.longitude;
+    var url = 'https://api.darksky.net/forecast/' + process.env.DARK_SKY_API + '/' + this.latitude + ',' + this.longitude;
     return new Promise(function (resolve, reject) {
       fetch(url)
       .then(response => {

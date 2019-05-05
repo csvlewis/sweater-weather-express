@@ -5,6 +5,7 @@ var Location = require('../../../models').Location;
 var Forecast = require('../../../public/forecast');
 const fetch = require('node-fetch');
 pry = require('pryjs');
+require('dotenv').config();
 
 // City Forecast
 router.get('/', function(req, res, next){
@@ -20,7 +21,7 @@ router.get('/', function(req, res, next){
     }
     else {
       const search_location = req.query.location;
-      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + ENV['GOOGLE_MAPS_API_KEY'];
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=' + process.env.GEOCODING_API;
       fetch(url)
       .then(response => {
         return response.json();
