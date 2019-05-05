@@ -71,7 +71,7 @@ router.post('/', function(req, res, next){
 router.delete('/', function(req, res, next){
   User.findOne({
     where: {
-      api_key: req.body.api_key
+      api_key: req.body.api_key.toLowerCase()
     }
   })
   .then(user => {
