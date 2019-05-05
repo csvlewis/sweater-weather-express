@@ -11,4 +11,5 @@ module.exports = (sequelize, DataTypes) => {
   Location.associate = function(models) {
     Location.hasMany(models.Favorite, { foreignKey: 'locationId' });
   };
+  return Location;
 };
