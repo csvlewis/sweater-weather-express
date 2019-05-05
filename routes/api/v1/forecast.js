@@ -34,8 +34,15 @@ router.get('/', function(req, res, next){
         })
         .then(location => {
           var forecast = location[0].forecast()
-          res.setHeader("Content-Type", "application/json");
-          res.status(500).send({ forecast })
+          .then(forecast => {
+            var newForecast = new Forecast(forecast)
+            res.setHeader("Content-Type", "application/json");
+            res.status(200).send(newForecast.detailedForecast(search_location))
+          })
+          .catch(error => {
+            res.setHeader("Content-Type", "application/json");
+            res.status(500).send({ error })
+          })
         })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
