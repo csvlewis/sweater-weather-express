@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var User = require('../../../models').User;
 var Location = require('../../../models').Location;
+var Forecast = require('../../../public/forecast');
 const fetch = require('node-fetch');
 pry = require('pryjs');
 
@@ -18,7 +19,7 @@ router.get('/', function(req, res, next){
       res.status(401).send(JSON.stringify("Invalid API key"));
     }
     else {
-      var search_location = req.query.location.toLowerCase();
+      const search_location = req.query.location;
       var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=AIzaSyDvKMInDzd7n_avQqlsflQwGxhllW-fhlM';
       fetch(url)
       .then(response => {
@@ -28,13 +29,23 @@ router.get('/', function(req, res, next){
         var lat = json.results[0].geometry.location.lat;
         var lng = json.results[0].geometry.location.lng;
         Location.findOrCreate({
-          where: { name: search_location},
+          where: { name: search_location.toLowerCase()},
           defaults: { latitude: lat, longitude: lng}
         })
         .then(location => {
-          var forecast = location[0].forecast()
-          res.setHeader("Content-Type", "application/json");
-          res.status(500).send({ forecast })
+          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + lat + ',' + lng;
+          fetch(url)
+          .then(response => {
+            return response.json();
+          })
+          .then(response => {
+            const forecast = new Forecast(response)
+            res.status(200).send(forecast.detailedForecast(search_location));
+          })
+          .catch(error => {
+            res.setHeader("Content-Type", "application/json");
+            res.status(500).send({ error })
+          });
         })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
