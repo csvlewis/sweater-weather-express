@@ -20,7 +20,7 @@ router.get('/', function(req, res, next){
     }
     else {
       const search_location = req.query.location;
-      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=AIzaSyDvKMInDzd7n_avQqlsflQwGxhllW-fhlM';
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + ENV['GOOGLE_MAPS_API_KEY'];
       fetch(url)
       .then(response => {
         return response.json();
@@ -33,7 +33,7 @@ router.get('/', function(req, res, next){
           defaults: { latitude: lat, longitude: lng}
         })
         .then(location => {
-          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + lat + ',' + lng;
+          var url = 'https://api.darksky.net/forecast/' + ENV['DARKSKY_API_KEY'] + lat + ',' + lng;
           fetch(url)
           .then(response => {
             return response.json();

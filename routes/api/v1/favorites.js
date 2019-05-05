@@ -21,7 +21,7 @@ router.post('/', function(req, res, next){
     }
     else {
       var search_location = req.body.location.toLowerCase();
-      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=AIzaSyDvKMInDzd7n_avQqlsflQwGxhllW-fhlM';
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + ENV['GOOGLE_MAPS_API_KEY'];
       fetch(url)
       .then(function(response){
         return response.json();
@@ -144,7 +144,7 @@ router.get('/', function(req, res, next){
         var i;
         const currentForecasts = []
         for (i = 0; i < location.length; i++) {
-          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
+          var url = 'https://api.darksky.net/forecast/' + ENV['DARKSKY_API_KEY'] + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
           const location_name = location[i].dataValues.name
           fetch(url)
           .then(response => {
