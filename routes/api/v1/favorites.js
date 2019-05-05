@@ -6,6 +6,7 @@ var Favorite = require('../../../models').Favorite;
 var Forecast = require('../../../public/forecast');
 var fetch = require('node-fetch');
 pry = require('pryjs');
+require('dotenv').config();
 
 // Save Favorite Location
 router.post('/', function(req, res, next){
@@ -21,7 +22,7 @@ router.post('/', function(req, res, next){
     }
     else {
       var search_location = req.body.location.toLowerCase();
-      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=AIzaSyDvKMInDzd7n_avQqlsflQwGxhllW-fhlM';
+      var url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + search_location + '&key=' + process.env.GEOCODING_API;
       fetch(url)
       .then(function(response){
         return response.json();
@@ -144,7 +145,7 @@ router.get('/', function(req, res, next){
         var i;
         const currentForecasts = []
         for (i = 0; i < location.length; i++) {
-          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
+          var url = 'https://api.darksky.net/forecast/' + process.env.DARK_SKY_API + '/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
           const location_name = location[i].dataValues.name
           fetch(url)
           .then(response => {
