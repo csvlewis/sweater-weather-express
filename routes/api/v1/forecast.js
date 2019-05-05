@@ -33,19 +33,16 @@ router.get('/', function(req, res, next){
           defaults: { latitude: lat, longitude: lng}
         })
         .then(location => {
-          var url = 'https://api.darksky.net/forecast/' + '80ddbb9666791f550fbdf293adcd6bae/' + lat + ',' + lng;
-          fetch(url)
-          .then(response => {
-            return response.json();
-          })
-          .then(response => {
-            const forecast = new Forecast(response)
-            res.status(200).send(forecast.detailedForecast(search_location));
+          var forecast = location[0].forecast()
+          .then(forecast => {
+            var newForecast = new Forecast(forecast)
+            res.setHeader("Content-Type", "application/json");
+            res.status(200).send(newForecast.detailedForecast(search_location))
           })
           .catch(error => {
             res.setHeader("Content-Type", "application/json");
             res.status(500).send({ error })
-          });
+          })
         })
         .catch(error => {
           res.setHeader("Content-Type", "application/json");
