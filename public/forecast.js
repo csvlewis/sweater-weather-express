@@ -7,7 +7,6 @@ class Forecast {
   }
 
   detailedForecast(location) {
-    var hourly = hourlyForecasts(this.data.hourly)
     var detailedForecast = {
       "location": location,
       "currently": {
@@ -80,7 +79,37 @@ function hourlyForecasts(hourly_data) {
   return hourly_array
 }
 
-function dailyForecasts(hourly_data) {
-  eval(pry.it)
+function dailyForecasts(daily_data) {
+  var daily_array = [{ "summary": daily_data.summary, "icon": daily_data.icon }]
+  for (i = 0; i < 7; i++) {
+    var single_forecast = {
+      "data": [
+        {
+          "time": daily_data.data[i].time,
+          "summary": daily_data.data[i].summary,
+          "icon": daily_data.data[i].wind,
+          "sunriseTime": daily_data.data[i].sunriseTime,
+          "sunsetTime": daily_data.data[i].sunsetTime,
+          "precipIntensity": daily_data.data[i].precipIntensity,
+          "precipIntensityMax": daily_data.data[i].precipIntensityMax,
+          "precipIntensityMaxTime": daily_data.data[i].precipIntensityMaxTime,
+          "precipProbability": daily_data.data[i].precipProbability,
+          "precipType": daily_data.data[i].precipType,
+          "temperatureHigh": daily_data.data[i].temperatureHigh,
+          "temperatureLow": daily_data.data[i].temperatureLow,
+          "humidity": daily_data.data[i].humidity,
+          "pressure": daily_data.data[i].pressure,
+          "windSpeed": daily_data.data[i].windSpeed,
+          "windGust": daily_data.data[i].windGust,
+          "cloudCover": daily_data.data[i].cloudCover,
+          "visibility": daily_data.data[i].visibility,
+          "temperatureMin": daily_data.data[i].temperatureMin,
+          "temperatureMax": daily_data.data[i].temperatureMax
+        }
+      ]
+    }
+    daily_array.push(single_forecast)
+  }
+  return daily_array
 }
 module.exports = Forecast;
