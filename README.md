@@ -12,11 +12,11 @@ Clone the project and enter the directory
 
     git clone https://github.com/csvlewis/sweater-weather-express.git
     cd sweater-weather-express
-    
+
 Install node packages
 
     npm install
-    
+
 You will need API keys for the [Google Maps API](https://developers.google.com/maps/documentation/geocoding/get-api-key) and the [Dark Sky API](https://darksky.net/dev/register) to run this app locally. Create a .env file in the root directory of the app and add the following environment variables:
 
     GEOCODING_API=first_key_goes_here
@@ -25,7 +25,7 @@ You will need API keys for the [Google Maps API](https://developers.google.com/m
 Start the server locally
 
     npm start
-    
+
 Now you can access any of the application's endpoints through http requests using an application like [Postman](https://www.getpostman.com/).
 
 ## How to Use
@@ -41,19 +41,19 @@ Visitors can create an account by making a request to the following endpoint:
     Accept: application/json
 
 With a body that contains an email, password, and password_confirmation:
-    
+
     {
       "email": "my_email@example.com",
       "password": "password"
       "password_confirmation": "password"
     }
-   
+
 If the user's email has not been taken and the password and password_confirmation fields match, an API key will be assigned and returned to the user:
 
     {
       "api_key": "jgn983hy48thw9begh98h4539h4"
     }
-    
+
 ### Login
 
 Users can retrieve their API key by making a request to the following endpoint:
@@ -61,14 +61,14 @@ Users can retrieve their API key by making a request to the following endpoint:
     POST /api/v1/sessions
     Content-Type: application/json
     Accept: application/json
-    
+
 With a body that contains the user's email and password:
 
     {
       "email": "my_email@example.com",
       "password": "password"
     }
-    
+
 If the user's email and password match that of a user in the database, the user's API key will be returned:
 
     {
@@ -82,13 +82,13 @@ Users can get a detailed weather forecast for a city by making a request to the 
     GET /api/v1/forecast?location=denver,co
     Content-Type: application/json
     Accept: application/json
-    
+
 With a body that contains their API key:
 
     {
       "api_key": "jgn983hy48thw9begh98h4539h4"
     }
-    
+
 If the user's API key is valid, a forecast for that location will be returned that starts something like this:
 
     {
@@ -107,7 +107,7 @@ If the user's API key is valid, a forecast for that location will be returned th
           "cloudCover": 1,
           "visibility": 9.12,
         },
-     
+
 ### Favoriting Locations
 
 Users can save a favorite location by making a request to the following endpoint:
@@ -115,20 +115,20 @@ Users can save a favorite location by making a request to the following endpoint
     POST /api/v1/favorites
     Content-Type: application/json
     Accept: application/json
-    
+
 With a body that contains the location they would like to favorite and their API key:
 
     {
       "location": "Denver, CO",
       "api_key": "jgn983hy48thw9begh98h4539h4"
     }
-    
+
 If the user's API key is valid, that location will be saved to their favorites and they will receive a message:
 
     {
       "message": "Denver, CO has been added to your favorites",
     }
-    
+
 ### Listing Favorite Locations
 
 Users can get a list of their favorite locations along with a current forecast for each by making a request to the following endpoint:
@@ -142,7 +142,7 @@ With a body that contains their API key:
     {
       "api_key": "jgn983hy48thw9begh98h4539h4"
     }
-    
+
 If the user's API key is valid, they will receive a list of their favorite locations and a current forecast for each:
 
     [
@@ -179,7 +179,7 @@ If the user's API key is valid, they will receive a list of their favorite locat
         }
       }
     ]
-    
+
 ### Deleting Favorite Locations
 
 Users can delete a favorite location by making a request to the following endpoint:
@@ -187,7 +187,7 @@ Users can delete a favorite location by making a request to the following endpoi
     DELETE /api/v1/favorites
     Content-Type: application/json
     Accept: application/json
-    
+
 With a body containing the location they would like to delete and their API key:
 
     {
@@ -215,6 +215,8 @@ If you would like to contribute to this project, you can do the following:
 - [Chris Lewis](https://github.com/csvlewis)
 
 ## Schema Visualization
+
+![Schema Visualization](/database.png?raw=true)
 
 ## Tech Stack
 - Node.js
