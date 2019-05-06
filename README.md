@@ -16,7 +16,12 @@ Clone the project and enter the directory
 Install node packages
 
     npm install
+    
+Create and migrate the database
 
+    npx sequelize db:create
+    npx sequelize db:migrate
+    
 You will need API keys for the [Google Maps API](https://developers.google.com/maps/documentation/geocoding/get-api-key) and the [Dark Sky API](https://darksky.net/dev/register) to run this app locally. Create a .env file in the root directory of the app and add the following environment variables:
 
     GEOCODING_API=first_key_goes_here
