@@ -4,7 +4,7 @@ var User = require('../../../models').User;
 var Location = require('../../../models').Location;
 var Forecast = require('../../../public/forecast');
 const fetch = require('node-fetch');
-pry = require('pryjs');
+
 require('dotenv').config();
 
 // City Forecast

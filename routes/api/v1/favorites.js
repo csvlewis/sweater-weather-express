@@ -5,7 +5,7 @@ var Location = require('../../../models').Location;
 var Favorite = require('../../../models').Favorite;
 var Forecast = require('../../../public/forecast');
 var fetch = require('node-fetch');
-pry = require('pryjs');
+
 require('dotenv').config();
 
 // Save Favorite Location
