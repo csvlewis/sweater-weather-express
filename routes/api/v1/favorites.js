@@ -37,8 +37,8 @@ router.post('/', function(req, res, next){
         .then(location => {
           Favorite.findOrCreate({
             where: {
-              locationId: location[0].dataValues.id,
-              userId: user.dataValues.id
+              locationId: location[0].id,
+              userId: user.id
             },
             attributes : ['userId', 'locationId']
           })
@@ -89,8 +89,8 @@ router.delete('/', function(req, res, next){
       .then(location => {
         Favorite.destroy({
           where: {
-            userId: user.dataValues.id,
-            locationId: location.dataValues.id
+            userId: user.id,
+            locationId: location.id
           }
         })
         .then(favorite => {
@@ -137,7 +137,7 @@ router.get('/', function(req, res, next){
         include: [
           {
             model: Favorite, as: Favorite.tableName,
-            where: { 'userId': user.dataValues.id }
+            where: { 'userId': user.id }
           }
         ]
       })
@@ -145,8 +145,8 @@ router.get('/', function(req, res, next){
         var i;
         const currentForecasts = []
         for (i = 0; i < location.length; i++) {
-          var url = 'https://api.darksky.net/forecast/' + process.env.DARK_SKY_API + '/' + location[i].dataValues.latitude + ',' + location[i].dataValues.longitude;
-          const location_name = location[i].dataValues.name
+          var url = 'https://api.darksky.net/forecast/' + process.env.DARK_SKY_API + '/' + location[i].latitude + ',' + location[i].longitude;
+          const location_name = location[i].name
           fetch(url)
           .then(response => {
             return response.json();

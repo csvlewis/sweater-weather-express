@@ -13,10 +13,10 @@ router.post('/', function(req, res, next){
   })
   .then(user => {
     let password = req.body.password
-    let user_password = user.dataValues.password
+    let user_password = user.password
     if (bcrypt.compareSync(password, user_password)) {
       res.setHeader("Content-Type", "application/json");
-      res.status(200).send(JSON.stringify({ api_key: user.dataValues.api_key }))
+      res.status(200).send(JSON.stringify({ api_key: user.api_key }))
     }
     else {
       res.setHeader("Content-Type", "application/json");
