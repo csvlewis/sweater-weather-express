@@ -1,4 +1,4 @@
-pry = require('pryjs');
+
 
 
 class Forecast {

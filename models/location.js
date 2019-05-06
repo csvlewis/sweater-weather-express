@@ -1,4 +1,4 @@
-pry = require('pryjs');
+
 var fetch = require('node-fetch');
 'use strict';
 require('dotenv').config();
